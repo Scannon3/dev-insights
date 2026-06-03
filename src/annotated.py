@@ -3,5 +3,5 @@
 def filter_and_sort_posts(posts: list[dict], user_id: int) -> list[dict]:
     #creates a new variable filtered and is assinged the results of the new list which are just the posts where the userid matches
     filtered = [post for post in posts if post["userId"] == user_id]
-    #returns the new list sorted by post title
+    #sorted takes in the filtered list and it sorts it by title. the key uses a lambda function and dummy variable for each iteration of filtered
     return sorted(filtered, key=lambda post: post["title"])
