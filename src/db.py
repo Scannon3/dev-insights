@@ -17,7 +17,7 @@ class Base(DeclarativeBase):
     pass
 
 def init_db() -> None:
-
+    #import here to avoid circular import (models.py)
     import models
 
     Base.metadata.create_all(engine)

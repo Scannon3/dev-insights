@@ -40,6 +40,14 @@ def fetch_recent_events(username: str) -> list[dict]:
     )
     response.raise_for_status()
     return response.json()
+def fetch_repo_languages(owner: str, repo:str) -> dict[str,list]:
+    #fetch byte breakdown of languages in repo
+    response = requests.get(
+        f"{BASE_URL}/repos/{owner}/{repo}/languages",
+        headers=get_headers(),
+    )
+    response.raise_for_status()
+    return response.json()
 
 if __name__=="__main__":
     #profile
@@ -60,4 +68,12 @@ if __name__=="__main__":
     for event in events[:10]:
         repo_name = event.get("repo", {}).get("name", "unknown")
         print(f"  {event['type']:25s}  {repo_name}")
+
+    #language breakdwon sample
+    if repos:
+        sample = repos[0]
+        langs = fetch_repo_languages(profile["login"], sample["name"])
+        print(f"\n--- languages in '{sample['name']}'---")
+        for lang, bytes_count in langs.items():
+            print(f"  {lang:20s}  {bytes_count:,} bytes")
 
