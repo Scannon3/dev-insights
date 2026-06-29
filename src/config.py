@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     github_client_secret: str
     github_redirect_uri: str
     github_access_token: str | None = None
+    api_key: str
 
 
 settings = Settings()
