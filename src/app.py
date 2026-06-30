@@ -2,7 +2,7 @@ from fastapi import FastAPI, Depends, Header, HTTPException
 from db import SessionLocal
 from sqlalchemy.orm import Session
 from sqlalchemy import select, func
-from schemas import LanguageStat, EventOut, RepoOut
+from schemas import LanguageStat, EventOut, RepoOut, EventType
 from models import RepositoryLanguage, Event, Repository
 from config import settings
 
@@ -28,7 +28,7 @@ def get_languages(session: Session = Depends(get_db), _ = Depends(require_api_ke
     return [LanguageStat(language=row.language, bytes=row.bytes) for row in rows]
 
 @app.get("/events", response_model=list[EventOut])
-def get_events(type: str | None = None, session: Session = Depends(get_db), _ = Depends(require_api_key)):
+def get_events(type: EventType | None = None, session: Session = Depends(get_db), _ = Depends(require_api_key)):
     stmt = select(Event.id, Event.type, Event.repo_name, Event.created_at).order_by(Event.created_at.desc())
     if type is not None:
         stmt = stmt.where(Event.type == type)

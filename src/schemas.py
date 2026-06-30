@@ -1,5 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel   
+from enum import Enum
 
 class LanguageStat(BaseModel):
     language: str
@@ -16,3 +17,16 @@ class RepoOut(BaseModel):
     description: str | None
     primary_language: str | None
     pushed_at: datetime | None
+
+class EventType(str, Enum):
+    push = "PushEvent"
+    pullreqevent = "PullRequestEvent"
+    create = "CreateEvent"
+    delete = "DeleteEvent"
+    watch = "WatchEvent"
+    fork = "ForkEvent"
+    issues = "IssuesEvent"
+    issuescommon = "IssueCommentEvent"
+    review = "PullRequestReviewEvent"
+    release = "ReleaseEvent"
+    public = "PublicEvent"
