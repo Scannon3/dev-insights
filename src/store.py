@@ -1,5 +1,9 @@
 from datetime import datetime, timezone
-from sqlalchemy.dialects.sqlite import insert
+from db import engine
+if engine.dialect.name == "postgresql":
+    from sqlalchemy.dialects.postgresql import insert
+else:
+    from sqlalchemy.dialects.sqlite import insert
 from models import User, Repository, RepositoryLanguage, Event
 from sqlalchemy.orm import Session
 

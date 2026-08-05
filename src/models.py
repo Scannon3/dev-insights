@@ -16,14 +16,13 @@ class User(Base):
     created_at: Mapped[datetime | None] #github account creation
     fetched_at: Mapped[datetime] # when pipeline snapshotted row
 
-    repositories: Mapped[list["Repository"]] = relationship(back_populates="owner")
  
 class Repository(Base):
     __tablename__ = "repositories"
 
     #githubs repo id is stable even if renamed which is why its PK
     id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    user_id: Mapped[int] 
     name: Mapped[str]
     full_name: Mapped[str | None]
     description: Mapped[str |None]
@@ -33,7 +32,6 @@ class Repository(Base):
     pushed_at: Mapped[datetime | None]
     fetched_at: Mapped[datetime]
 
-    owner: Mapped["User"] = relationship(back_populates="repositories")
     languages: Mapped[list["RepositoryLanguage"]] = relationship(back_populates="repository")
 
 class RepositoryLanguage(Base):
