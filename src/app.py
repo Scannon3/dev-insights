@@ -8,6 +8,11 @@ from config import settings
 
 app = FastAPI()
 
+@app.on_event("startup")
+def on_startup() -> None:
+    from db import init_db
+    init_db()
+
 def require_api_key(x_api_key: str = Header(...)):
     if x_api_key != settings.api_key:
         raise HTTPException(status_code=401, detail="Invalid Api Key") 
