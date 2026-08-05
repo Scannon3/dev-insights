@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     github_redirect_uri: str
     github_access_token: str | None = None
     api_key: str
+    database_url: str |None = None
 
 
 settings = Settings()
