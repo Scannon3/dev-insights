@@ -1,10 +1,17 @@
 from fastapi import FastAPI, Depends, Header, HTTPException
 from db import SessionLocal
 from sqlalchemy.orm import Session
-from sqlalchemy import select, func
+from sqlalchemy import select, func, text
 from schemas import LanguageStat, EventOut, RepoOut, EventType
 from models import RepositoryLanguage, Event, Repository
 from config import settings
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(name)s %(message)s",
+)
+logger = logging.getLogger("dev_insights")
 
 app = FastAPI()
 
@@ -12,6 +19,7 @@ app = FastAPI()
 def on_startup() -> None:
     from db import init_db
     init_db()
+    logger.info("application startup complete; database initialized")
 
 def require_api_key(x_api_key: str = Header(...)):
     if x_api_key != settings.api_key:
@@ -23,6 +31,15 @@ def get_db():
         yield session
     finally:
         session.close()
+
+@app.get("/health")
+def health(session: Session = Depends(get_db)):
+    try:
+         session.execute(text("SELECT 1"))
+    except Exception:
+        logger.exception("Health check failed: database unreachable")
+        raise HTTPException(status_code=503, detail="Database unavailable")
+    return {"status": "ok"}
 
 @app.get("/languages", response_model=list[LanguageStat])
 def get_languages(session: Session = Depends(get_db), _ = Depends(require_api_key)):
