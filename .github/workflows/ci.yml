@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Write a throwaway .env for tests
+        run: |
+          cat > .env <<'EOF'
+          GITHUB_CLIENT_ID=ci-not-real
+          GITHUB_CLIENT_SECRET=ci-not-real
+          GITHUB_REDIRECT_URI=http://localhost/callback
+          API_KEY=ci-test-key
+          EOF
+
+      - name: Run tests
+        run: pytest
