@@ -23,7 +23,7 @@ foreign key repository_languages.repository_id maps to repositories_id. many lan
 
 trade offs:
 
-soft reference on event.repo_id gives up referential integrity, databsae no longer guarentees that an events repo_id points to a real stored repo, so some events dangle
+soft references on event.repo_id and repository.user_id give up referential integrity so the database no longer guarantees that an event's repo_id points to a real stored repo, or that a repository's user_id points to a real stored user. so some of these references dangle, pointing at ids that were never stored.
 
 SQLite+ORM - the swap to postgres will require insert functions to change to postgres equivlent
 
