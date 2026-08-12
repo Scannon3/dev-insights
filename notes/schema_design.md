@@ -2,7 +2,7 @@ dev insights stores data from different github api endpoints... users,repositori
 
 users- holds unique id pk,login,users name, and number of repos 
 
-repositories- holds unique id, user_id(foreign key linking to users),name of repo,primary language of repo, and when it was pushed 
+repositories- holds unique id, user_id ,name of repo, primary language of repo, and when it was pushed 
 
 repository_languages-holds repository_id(foreign key links to repository),language and bytes used for each.
 
@@ -18,7 +18,6 @@ datetimes stored as real datetime objects to prevent sloppy date strings/corrupt
 
 started with sqlite to quickly get set up and built using ORM(SQLAlchemy) to make it easier to transition to postgres at a later time. writing raw sql instead wopuld have meant alll the queries would have to be redone when switching as different databases have slightly different syntax for sql
 
-foreign key repositories.user_id maps back to users.id. one user can have many repositories.
 
 foreign key repository_languages.repository_id maps to repositories_id. many languages to one repository
 
